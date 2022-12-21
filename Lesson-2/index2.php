@@ -1,11 +1,10 @@
 <?php
-
-//init
-$count = 1;
-$totalTime = 0;
-
 define("ASK_TIME", "Сколько примерно времени эта задача займет? ");
 define("ASK_TASK", "Какая задача стоит перед вами сегодня? ");
+
+//init
+$totalTime = 0;
+$result = "";
 
 //input data
 $nameUser = readline("Введите Ваше Имя: ");
@@ -15,23 +14,16 @@ do {
 } while ($quantity <= 0);
 
 //main logic
-$result = "{$nameUser}, сегодня у вас запланировано {$quantity} приоритетных задачи на день: \n";
-
 for($i = 0; $i < $quantity; $i++) {
-    $task = "task{$count}";
-    $time = "time{$count}";
+    $task = readline(ASK_TASK);
+    $time = (int)readline(ASK_TIME);
 
-    $$task = readline(ASK_TASK);
-    $$time = (int)readline(ASK_TIME);
+    $totalTime += $time;
 
-    $totalTime += $$time;
-
-    $result .= "- {$$task} ({$$time}ч)\n";
-
-    $count++;
+    $result .= "- {$task} ({$time}ч)\n";
 }
 
-$result .= "Примерное время выполнения плана = {$totalTime}ч";
-
 //output data
+echo "{$nameUser}, сегодня у вас запланировано {$quantity} приоритетных задачи на день: \n";
 echo $result;
+echo "Примерное время выполнения плана = {$totalTime}ч";
