@@ -40,6 +40,7 @@ class Task
     public function setPriority(int $newPriority): void
     {
         $this->priority = $newPriority;
+        $this->dateUpdated = new DateTime();
     }
 
     public function setComment(Comment $newComment): void
