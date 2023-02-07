@@ -11,18 +11,28 @@ class UserProvider
         $this->pdo = $pdo;
     }
 
-    public function regUser(User $user, string $plainPassword): bool
+    public function checkUser(User $user): ?string
+    {
+        $login = $user->getUserName();
+        $sql = "SELECT userName FROM users WHERE userName = '$login'";
+        $statement = $this->pdo->query($sql);
+        if ($statement->fetchAll()) {
+            return "Пользователь с таким логином уже существует.";
+        } else return null;
+    }
+
+    public function regUser(User $user, string $plainPassword): int
     {
         $statement = $this->pdo->prepare(
             'INSERT INTO users (name, userName, password) VALUES (:name, :userName, :password)'
         );
 
         $statement->execute([
-                'name' => $user->getName(),
-                'userName' => $user->getUserName(),
-                'password' => md5($plainPassword)
-            ]);
-        
+            'name' => $user->getName(),
+            'userName' => $user->getUserName(),
+            'password' => md5($plainPassword)
+        ]);
+
         return $this->pdo->lastInsertId();
     }
 
@@ -37,6 +47,4 @@ class UserProvider
         ]);
         return $statement->fetchObject(User::class, [$userName]) ?: null;
     }
-
-    
 }

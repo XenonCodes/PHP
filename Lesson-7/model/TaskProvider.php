@@ -9,66 +9,62 @@ class TaskProvider
         $this->pdo = $pdo;
     }
 
-    public function getUndoneList():array
+    public function getUndoneList(User $user):array
     {
-        //ДОРАБТАТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $statement = $this->pdo->prepare(
             'SELECT * FROM tasks WHERE isDone = 0 AND userId = :id'
         );
 
         $statement->execute([
-            'id' => $_SESSION['user_id'],
+            'id' => $user->getId(),
         ]);
 
         return $statement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Task::class);
     }
 
-    public function getDoneList(): array
+    public function getDoneList(User $user): array
     {
         $statement = $this->pdo->prepare(
             'SELECT * FROM tasks WHERE isDone = 1 AND userId = :id'
         );
 
         $statement->execute([
-            'id' => $_SESSION['user_id'],
+            'id' => $user->getId(),
         ]);
 
         return $statement->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Task::class);
     }
 
-    public function addTask(Task $task): bool
+    public function addTask(User $user ,Task $task): bool
     {
-        //ДОРАБТАТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $statement = $this->pdo->prepare(
             'INSERT INTO tasks (userId, description) VALUES (:userId, :description)'
         );
 
         return $statement->execute([
-            'userId' => $_SESSION['user_id'],
+            'userId' => $user->getId(),
             'description' => $task->getDescription(),
         ]);
     }
 
-    public function doneTask(int $id): bool
+    public function doneTask(User $user ,int $id): bool
     {
-        //ДОРАБТАТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $statement = $this->pdo->prepare(
             'UPDATE tasks SET isDone = 1 WHERE id = :id AND userId = :userId'
         );
         return $statement->execute([
-            'userId' => $_SESSION['user_id'],
+            'userId' => $user->getId(),
             'id' => $id,
         ]);
     }
 
-    public function deleteTask(int $id): bool
+    public function deleteTask(User $user , int $id): bool
     {
-        // $DBH->exec("DELETE FROM `students` WHERE id = 4");
         $statement = $this->pdo->prepare(
             'DELETE FROM tasks WHERE id = :id AND userId = :userId'
         );
         return $statement->execute([
-            'userId' => $_SESSION['user_id'],
+            'userId' => $user->getId(),
             'id' => $id,
         ]);
     }

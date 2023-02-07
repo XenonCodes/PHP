@@ -4,10 +4,10 @@ require_once 'model/UserProvider.php';
 
 session_start();
 
-echo "<pre style='text-align: left'>";
-print_r($_SESSION);
-print_r($_REQUEST);
-echo "</pre>";
+// echo "<pre style='text-align: left'>";
+// print_r($_SESSION);
+// print_r($_REQUEST);
+// echo "</pre>";
 
 $pageHeader = 'Авторизация';
 
